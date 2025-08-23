@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prepify - Create Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --primary-dark: #3a0ca3;
+      --secondary: #f72585;
+      --accent: #4cc9f0;
+      --bg: #f8f9fa;
+      --text: #2b2d42;
+      --text-light: #6c757d;
+      --white: #ffffff;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+/* Whole page fade-in effect */
+body {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+body.fade-in {
+    opacity: 1;
+}
+/* craete account animation */
+/* Add to your existing CSS */
+
+.btn--loading {
+  /* Style for when button is in loading state */
+  pointer-events: none; /* Prevent clicks during animation */
+  padding-right: 40px; /* Make space for the spinner */
+}
+
+.btn__spinner {
+  /* Create a spinning loader */
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btn--loading .btn__spinner {
+  opacity: 1; /* Show spinner when loading */
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+.btn--success {
+  background-color: #4ade80 !important; /* Green color for success */
+}
+
+.btn__check {
+  /* Checkmark icon */
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+.btn--success .btn__check {
+  opacity: 1;
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      width: 100%;
+      max-width: 500px;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .logo-icon {
+      font-size: 2rem;
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      opacity: 0.9;
+    }
+
+    .form-container {
+      padding: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s;
+      
+  /* Add these properties to your existing .btn class */
+  position: relative; /* Needed for the spinner positioning */
+  overflow: hidden; /* Keeps the animation contained */
+  transition: all 0.3s ease; /* Smooth transition for changes */
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .privacy-note {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 1.5rem;
+      }
+      
+      .form-container {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <i class="fa-solid fa-atom logo-icon"></i>
+        <div class="logo-text">Prepify</div>
+      </div>
+      <p>Let's personalize your learning experience</p>
+    </div>
+
+    <div class="form-container">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="educationLevel">Education Level</label>
+        <select id="educationLevel" required>
+          <option value="" disabled selected>Select your education level</option>
+          <option value="highschool">High School</option>
+          <option value="undergraduate">Undergraduate</option>
+          <option value="graduate">Graduate</option>
+          <option value="professional">Professional</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="fieldOfStudy">Field of Interest/Major</label>
+        <input type="text" id="fieldOfStudy" placeholder="e.g. Computer Science, Biology, etc.">
+      </div>
+
+     <button class="btn" onclick="saveUserData()">
+  <i class="fas fa-user-plus"></i> 
+  <span class="btn__text">Create Account</span>
+  <span class="btn__spinner"></span>
+</button>
+
+      <p class="privacy-note">
+        <i class="fas fa-shield-alt"></i> Your data stays on this device and is not shared with anyone.
+      </p>
+    </div>
+  </div>
+
+  <script>
+   // Remove the duplicate saveUserData() function and replace with this:
+
+function setButtonLoading(button, isLoading) {
+  if (isLoading) {
+    button.classList.add('btn--loading');
+    button.setAttribute('disabled', 'disabled');
+  } else {
+    button.classList.remove('btn--loading');
+    button.removeAttribute('disabled');
+  }
+}
+
+function saveUserData() {
+  const fullName = document.getElementById('fullName').value;
+  const educationLevel = document.getElementById('educationLevel').value;
+  const fieldOfStudy = document.getElementById('fieldOfStudy').value;
+
+  // Simple validation
+  if (!fullName || !educationLevel) {
+    alert('Please fill in all required fields');
+    return;
+  }
+
+  // Get the button element
+  const button = document.querySelector('.btn');
+  
+  // Show loading state
+  setButtonLoading(button, true);
+  
+  // Simulate processing (remove this timeout in your actual code)
+  setTimeout(() => {
+    // Save user data to localStorage
+    const userData = {
+      name: fullName,
+      educationLevel: educationLevel,
+      fieldOfStudy: fieldOfStudy,
+      joined: new Date().toISOString()
+    };
+
+    localStorage.setItem('prepifyUser', JSON.stringify(userData));
+    
+    // Hide loading state when done
+    setButtonLoading(button, false);
+    
+    // Redirect to main app
+    window.location.href = 'landing.html';
+  }, 1500); // 1.5 second delay for demonstration
+}
+
+// Allow form submission with Enter key
+document.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    saveUserData();
+  }
+});
+
+// Simple whole page fade-in effect
+document.addEventListener('DOMContentLoaded', function() {
+  // Add fade-in class to body after a tiny delay
+  setTimeout(function() {
+    document.body.classList.add('fade-in');
+  }, 50);
+});
+
+// Optional: Add fade-out effect when leaving page
+window.addEventListener('beforeunload', function() {
+  document.body.classList.remove('fade-in');
+});
+  </script>
+</body>
+</html>

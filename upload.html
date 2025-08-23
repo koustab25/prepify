@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prepify - Upload Documents</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --primary-dark: #3a0ca3;
+      --secondary: #f72585;
+      --accent: #4cc9f0;
+      --bg: #f8f9fa;
+      --text: #2b2d42;
+      --text-light: #6c757d;
+      --white: #ffffff;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --success: #4ade80;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .back-btn {
+      background: var(--white);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    /* Main content */
+    .upload-container {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .page-subtitle {
+      color: var(--text-light);
+      margin-bottom: 2rem;
+    }
+
+    /* Upload area */
+    .upload-area {
+      border: 2px dashed #ddd;
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: all 0.3s;
+      margin-bottom: 1.5rem;
+      background: rgba(67, 97, 238, 0.03);
+    }
+
+    .upload-area.drag-over {
+      border-color: var(--primary);
+      background: rgba(67, 97, 238, 0.08);
+    }
+
+    .upload-icon {
+      font-size: 3.5rem;
+      color: var(--primary-light);
+      margin-bottom: 1rem;
+    }
+
+    .upload-text {
+      margin-bottom: 1.5rem;
+    }
+
+    .upload-text h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-text p {
+      color: var(--text-light);
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .browse-btn {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .browse-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Question customization */
+    .customization-panel {
+      background: rgba(67, 97, 238, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .customization-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .option-group {
+      margin-bottom: 1rem;
+    }
+
+    .option-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .option-group input,
+    .option-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .option-group input:focus,
+    .option-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox-item input {
+      width: auto;
+    }
+
+    /* File list */
+    .file-list {
+      margin-top: 2rem;
+    }
+
+    .file-list h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .file-icon {
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .file-name {
+      font-weight: 500;
+    }
+
+    .file-size {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .file-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .file-action-btn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+
+    .file-action-btn:hover {
+      color: var(--primary);
+    }
+
+    .delete-btn:hover {
+      color: var(--secondary);
+    }
+
+    /* Process button */
+    .process-btn {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: block;
+      width: 100%;
+      margin-top: 2rem;
+    }
+
+    .process-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3);
+    }
+
+    .process-btn:disabled {
+      background: var(--text-light);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .upload-container {
+        padding: 1.5rem;
+      }
+      
+      .upload-area {
+        padding: 2rem 1rem;
+      }
+      
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      
+      .customization-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fa-solid fa-atom logo-icon"></i>
+        <div class="logo-text">Prepify</div>
+      </div>
+      <a href="landing.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </header>
+
+    <div class="upload-container">
+      <h1 class="page-title">Upload Study Materials</h1>
+      <p class="page-subtitle">Upload your PDFs, documents, or notes to generate practice questions</p>
+
+      <div class="upload-area" id="uploadArea">
+        <div class="upload-icon">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <div class="upload-text">
+          <h3>Drag & Drop your files here</h3>
+          <p>Supported formats: PDF, DOC, DOCX, TXT</p>
+        </div>
+        <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt" multiple>
+        <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
+          Browse Files
+        </button>
+      </div>
+   <div class="file-list">
+        <h3>Uploaded Files</h3>
+        <div id="fileListContainer">
+          <p style="margin-bottom: 10px;" id="noFilesMessage">No files uploaded yet</p>
+          <!-- File items will be added here dynamically -->
+        </div>
+      </div>
+      <!-- Question Customization Panel -->
+      <div class="customization-panel">
+        <h3 class="panel-title">
+          <i class="fas fa-cog"></i> Customize Your Questions
+        </h3>
+        
+        <div class="customization-options">
+          <div class="option-group">
+            <label for="questionCount">Number of Questions</label>
+            <input type="number" id="questionCount" min="5" max="50" value="15">
+          </div>
+          
+          <div class="option-group">
+            <label for="difficulty">Difficulty Level</label>
+            <select id="difficulty">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+              <option value="mixed">Mixed</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="option-group">
+          <label>Question Types</label>
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <input type="checkbox" id="mcq" checked>
+              <label for="mcq">Multiple Choice (MCQ)</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="shortAnswer" checked>
+              <label for="shortAnswer">Short Answer</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="trueFalse">
+              <label for="trueFalse">True/False</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="essay">
+              <label for="essay">Essay Questions</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+   
+
+      <button class="process-btn" id="processBtn" disabled>
+        Generate Questions
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // DOM elements
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileListContainer = document.getElementById('fileListContainer');
+    const noFilesMessage = document.getElementById('noFilesMessage');
+    const processBtn = document.getElementById('processBtn');
+    const questionCount = document.getElementById('questionCount');
+    const difficulty = document.getElementById('difficulty');
+    
+    // Store uploaded files and settings
+    let uploadedFiles = [];
+    let questionSettings = {
+      count: 15,
+      difficulty: 'medium',
+      types: ['mcq', 'shortAnswer']
+    };
+    
+    // Update settings when user changes them
+    questionCount.addEventListener('change', () => {
+      questionSettings.count = parseInt(questionCount.value);
+    });
+    
+    difficulty.addEventListener('change', () => {
+      questionSettings.difficulty = difficulty.value;
+    });
+    
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        const type = checkbox.id;
+        if (checkbox.checked && !questionSettings.types.includes(type)) {
+          questionSettings.types.push(type);
+        } else if (!checkbox.checked && questionSettings.types.includes(type)) {
+          questionSettings.types = questionSettings.types.filter(t => t !== type);
+        }
+      });
+    });
+    
+    // Drag and drop functionality
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      uploadArea.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadArea.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadArea.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight() {
+      uploadArea.classList.add('drag-over');
+    }
+    
+    function unhighlight() {
+      uploadArea.classList.remove('drag-over');
+    }
+    
+    // Handle dropped files
+    uploadArea.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      handleFiles(files);
+    }
+    
+    // Handle file input change
+    fileInput.addEventListener('change', function() {
+      handleFiles(this.files);
+    });
+    
+    // Process the uploaded files
+    function handleFiles(files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Check if file is a supported format
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!['pdf', 'doc', 'docx', 'txt'].includes(fileExtension)) {
+          alert(`File format not supported: ${file.name}`);
+          continue;
+        }
+        
+        // Check if file is already uploaded
+        if (uploadedFiles.some(f => f.name === file.name && f.size === file.size)) {
+          continue;
+        }
+        
+        // Add to uploaded files
+        uploadedFiles.push(file);
+        
+        // Create file item UI
+        createFileItem(file);
+      }
+      
+      // Update UI
+      updateFileListUI();
+    }
+    
+    // Create file item element
+    function createFileItem(file) {
+      const fileItem = document.createElement('div');
+      fileItem.className = 'file-item';
+      
+      const fileSize = formatFileSize(file.size);
+      
+      fileItem.innerHTML = `
+        <div class="file-info">
+          <i class="fas fa-file-pdf file-icon"></i>
+          <div>
+            <div class="file-name">${file.name}</div>
+            <div class="file-size">${fileSize}</div>
+          </div>
+        </div>
+        <div class="file-actions">
+          <button class="file-action-btn delete-btn" onclick="removeFile('${file.name}', ${file.size})">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      `;
+      
+      fileListContainer.appendChild(fileItem);
+    }
+    
+    // Update file list UI
+    function updateFileListUI() {
+      if (uploadedFiles.length > 0) {
+        noFilesMessage.style.display = 'none';
+        processBtn.disabled = false;
+      } else {
+        noFilesMessage.style.display = 'block';
+        processBtn.disabled = true;
+      }
+    }
+    
+    // Remove file from list
+    function removeFile(fileName, fileSize) {
+      uploadedFiles = uploadedFiles.filter(file => 
+        !(file.name === fileName && file.size === fileSize)
+      );
+      
+      // Rebuild file list
+      fileListContainer.innerHTML = '<p id="noFilesMessage">No files uploaded yet</p>';
+      noFilesMessage = document.getElementById('noFilesMessage');
+      
+      uploadedFiles.forEach(file => {
+        createFileItem(file);
+      });
+      
+      updateFileListUI();
+    }
+    
+    // Format file size to readable format
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    // Process files
+    processBtn.addEventListener('click', function() {
+      if (uploadedFiles.length === 0) return;
+      
+      // Save settings to localStorage
+      localStorage.setItem('questionSettings', JSON.stringify(questionSettings));
+      
+      // Show loading state
+      processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+      processBtn.disabled = true;
+      
+      // For now, we'll simulate processing
+      // In a real app, you would send the files and settings to your server/API
+      setTimeout(() => {
+        // Redirect to processing page
+        window.location.href = 'loading.html';
+      }, 1500);
+    });
+    
+    // Initialize page
+    updateFileListUI();
+  </script>
+</body>
+</html>
