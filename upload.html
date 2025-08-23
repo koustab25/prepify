@@ -20,7 +20,15 @@
       --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       --success: #4ade80;
     }
+/* Whole page fade-in effect */
+body {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
 
+body.fade-in {
+    opacity: 1;
+}
     * {
       margin: 0;
       padding: 0;
@@ -625,6 +633,19 @@
     
     // Initialize page
     updateFileListUI();
+
+    // Simple whole page fade-in effect
+document.addEventListener('DOMContentLoaded', function() {
+  // Add fade-in class to body after a tiny delay
+  setTimeout(function() {
+    document.body.classList.add('fade-in');
+  }, 50);
+});
+
+// Optional: Add fade-out effect when leaving page
+window.addEventListener('beforeunload', function() {
+  document.body.classList.remove('fade-in');
+});
   </script>
 </body>
 </html>
