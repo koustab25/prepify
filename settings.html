@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prepify - Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --primary-dark: #3a0ca3;
+      --secondary: #f72585;
+      --accent: #4cc9f0;
+      --bg: #f8f9fa;
+      --text: #2b2d42;
+      --text-light: #6c757d;
+      --white: #ffffff;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      font-size: 2.2rem;
+      color: var(--primary);
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .back-btn {
+      background: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 6px rgba(67, 97, 238, 0.15);
+    }
+
+    .back-btn:hover {
+      background: var(--primary);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(67, 97, 238, 0.2);
+    }
+
+    .settings-container {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .settings-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient);
+    }
+
+    .page-title {
+      font-size: 2.2rem;
+      margin-bottom: 2.5rem;
+      color: var(--text);
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .settings-section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .settings-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary-dark);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: var(--primary);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .setting-item {
+      margin-bottom: 1.5rem;
+    }
+
+    .setting-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .setting-description {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 0.8rem;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      background: var(--white);
+      color: var(--text);
+    }
+
+    select:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox-item input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #f8f9fa;
+      color: var(--text);
+      border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+      background: #e9ecef;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: var(--white);
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .theme-options {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .theme-option {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .theme-option.active {
+      border-color: var(--primary);
+    }
+
+    .theme-light {
+      background: #f8f9fa;
+    }
+
+    .theme-dark {
+      background: #2b2d42;
+    }
+
+    .theme-blue {
+      background: #4361ee;
+    }
+
+    @media (max-width: 768px) {
+      .settings-container {
+        padding: 1.5rem;
+      }
+      
+      .page-title {
+        font-size: 1.8rem;
+      }
+      
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fa-solid fa-atom logo-icon"></i>
+        <div class="logo-text">Prepify</div>
+      </div>
+      <a href="questions.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to App
+      </a>
+    </header>
+
+    <div class="settings-container">
+      <h1 class="page-title">Settings</h1>
+      
+      <div class="settings-section">
+        <h2 class="section-title"><i class="fas fa-cog"></i> Question Generation</h2>
+        
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label class="setting-label">Default Number of Questions</label>
+            <p class="setting-description">How many questions to generate per document</p>
+            <input type="number" min="5" max="50" value="10">
+          </div>
+          
+          <div class="setting-item">
+            <label class="setting-label">Default Difficulty Level</label>
+            <p class="setting-description">Set the default difficulty for generated questions</p>
+            <select>
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="setting-item">
+          <label class="setting-label">Question Types</label>
+          <p class="setting-description">Select which types of questions to generate by default</p>
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <input type="checkbox" id="mcq" checked>
+              <label for="mcq">Multiple Choice</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="short-answer" checked>
+              <label for="short-answer">Short Answer</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="true-false">
+              <label for="true-false">True/False</label>
+            </div>
+            <div class="checkbox-item">
+              <input type="checkbox" id="essay">
+              <label for="essay">Essay Questions</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h2 class="section-title"><i class="fas fa-paint-brush"></i> Appearance</h2>
+        
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label class="setting-label">Theme</label>
+            <p class="setting-description">Choose your preferred color theme</p>
+            <div class="theme-options">
+              <div class="theme-option theme-light active"></div>
+              <div class="theme-option theme-dark"></div>
+              <div class="theme-option theme-blue"></div>
+            </div>
+          </div>
+          
+          <div class="setting-item">
+            <label class="setting-label">Font Size</label>
+            <p class="setting-description">Adjust the text size throughout the app</p>
+            <select>
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h2 class="section-title"><i class="fas fa-bell"></i> Notifications</h2>
+        
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label class="setting-label">Study Reminders</label>
+            <p class="setting-description">Receive reminders to study based on your activity</p>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <label class="setting-label">New Features</label>
+            <p class="setting-description">Get notified when new features are released</p>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h2 class="section-title"><i class="fas fa-database"></i> Data & Privacy</h2>
+        
+        <div class="setting-item">
+          <label class="setting-label">Export Data</label>
+          <p class="setting-description">Download all your questions and study history</p>
+          <button class="btn btn-secondary">Export My Data</button>
+        </div>
+        
+        <div class="setting-item">
+          <label class="setting-label">Clear History</label>
+          <p class="setting-description">Delete all your generated questions and documents</p>
+          <button class="btn btn-danger">Clear All Data</button>
+        </div>
+      </div>
+      
+      <div class="action-buttons">
+        <button class="btn btn-primary">Save Changes</button>
+        <button class="btn btn-secondary">Reset to Defaults</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Theme selection
+      const themeOptions = document.querySelectorAll('.theme-option');
+      themeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          themeOptions.forEach(opt => opt.classList.remove('active'));
+          this.classList.add('active');
+          // Here you would typically update the actual theme
+        });
+      });
+      
+      // Save settings
+      const saveButton = document.querySelector('.btn-primary');
+      saveButton.addEventListener('click', function() {
+        alert('Settings saved successfully!');
+        // Here you would typically save settings to localStorage or backend
+      });
+      
+      // Reset settings
+      const resetButton = document.querySelector('.btn-secondary');
+      resetButton.addEventListener('click', function() {
+        if(confirm('Are you sure you want to reset all settings to default?')) {
+          // Reset form elements here
+          alert('Settings reset to defaults.');
+        }
+      });
+      
+      // Clear data
+      const clearButton = document.querySelector('.btn-danger');
+      clearButton.addEventListener('click', function() {
+        if(confirm('This will permanently delete all your data. Are you sure?')) {
+          alert('All data has been cleared.');
+          // Here you would typically clear localStorage or make API call
+        }
+      });
+    });
+  </script>
+</body>
+</html>
