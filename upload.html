@@ -6,6 +6,7 @@
   <title>Prepify - Upload Documents</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
   <style>
     :root {
       --primary: #4361ee;
@@ -601,6 +602,33 @@ body.fade-in {
       updateFileListUI();
     }
     
+
+    // PDF text extraction function
+async function extractTextFromPDF(pdfFile) {
+  // Initialize PDF.js
+  const pdfjsLib = window['pdfjs-dist/build/pdf'];
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+  
+  try {
+    const arrayBuffer = await pdfFile.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    
+    let fullText = '';
+    const maxPages = Math.min(pdf.numPages, 10); // Limit to first 10 pages for performance
+    
+    for (let i = 1; i <= maxPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      fullText += textContent.items.map(item => item.str).join(' ') + '\n';
+    }
+    
+    return fullText;
+  } catch (error) {
+    console.error('PDF extraction error:', error);
+    throw new Error('Failed to extract text from PDF');
+  }
+}
+
     // Format file size to readable format
     function formatFileSize(bytes) {
       if (bytes === 0) return '0 Bytes';
@@ -613,23 +641,40 @@ body.fade-in {
     }
     
     // Process files
-    processBtn.addEventListener('click', function() {
-      if (uploadedFiles.length === 0) return;
-      
-      // Save settings to localStorage
-      localStorage.setItem('questionSettings', JSON.stringify(questionSettings));
-      
-      // Show loading state
-      processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-      processBtn.disabled = true;
-      
-      // For now, we'll simulate processing
-      // In a real app, you would send the files and settings to your server/API
-      setTimeout(() => {
-        // Redirect to processing page
-        window.location.href = 'loading.html';
-      }, 1500);
-    });
+   // Process files
+processBtn.addEventListener('click', async function() {
+  if (uploadedFiles.length === 0) return;
+  
+  // Show loading state
+  processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+  processBtn.disabled = true;
+  
+  try {
+    // Extract text from the first PDF file
+    const pdfFile = uploadedFiles[0];
+    const extractedText = await extractTextFromPDF(pdfFile);
+    
+    // Save settings and extracted text to localStorage
+    localStorage.setItem('questionSettings', JSON.stringify(questionSettings));
+    localStorage.setItem('extractedText', extractedText);
+    
+    // Save file info too
+    localStorage.setItem('uploadedFiles', JSON.stringify(
+      uploadedFiles.map(f => ({ name: f.name, size: f.size }))
+    ));
+
+    // Redirect to loading page
+    window.location.href = 'loading.html';
+    
+  } catch (error) {
+    console.error('Error processing PDF:', error);
+    alert('Error: ' + error.message);
+    
+    // Reset button state
+    processBtn.innerHTML = 'Generate Questions';
+    processBtn.disabled = false;
+  }
+});
     
     // Initialize page
     updateFileListUI();
