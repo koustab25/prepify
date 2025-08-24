@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Prepify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --primary-dark: #3a0ca3;
+      --secondary: #f72585;
+      --accent: #4cc9f0;
+      --bg: #f8f9fa;
+      --text: #2b2d42;
+      --text-light: #6c757d;
+      --white: #ffffff;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      --quiz-gradient: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+      --test-gradient: linear-gradient(135deg, #4cc9f0 0%, #3a0ca3 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      font-size: 2.2rem;
+      color: var(--primary);
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .back-btn {
+      background: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 6px rgba(67, 97, 238, 0.15);
+      margin-left: 10px;
+    }
+
+    .back-btn:hover {
+      background: var(--primary);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(67, 97, 238, 0.2);
+    }
+
+    .about-container {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      padding: 3rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient);
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: var(--text);
+      text-align: center;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 0 2rem;
+    }
+
+    .intro p {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .feature-card {
+      background: var(--bg);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(67, 97, 238, 0.1);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: white;
+      font-size: 1.8rem;
+    }
+
+    .icon-primary {
+      background: var(--gradient);
+    }
+
+    .icon-quiz {
+      background: var(--quiz-gradient);
+    }
+
+    .icon-test {
+      background: var(--test-gradient);
+    }
+
+    .feature-title {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    .feature-desc {
+      color: var(--text-light);
+      flex-grow: 1;
+    }
+
+    .feature-status {
+      margin-top: 1rem;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .status-available {
+      background: rgba(76, 201, 240, 0.15);
+      color: var(--accent);
+    }
+
+    .status-soon {
+      background: rgba(247, 37, 133, 0.15);
+      color: var(--secondary);
+    }
+
+    .how-it-works {
+      margin: 4rem 0;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+      position: relative;
+    }
+
+    .step {
+      flex: 1;
+      min-width: 250px;
+      text-align: center;
+      position: relative;
+      padding: 0 1rem;
+    }
+
+    .step-number {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 auto 1.5rem;
+    }
+
+    .step-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    .step-desc {
+      color: var(--text-light);
+    }
+
+    .cta-section {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: var(--gradient);
+      border-radius: 16px;
+      color: white;
+      margin-top: 3rem;
+    }
+
+    .cta-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: var(--white);
+      color: var(--primary);
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .cta-button:hover {
+      background: transparent;
+      color: var(--white);
+      border-color: var(--white);
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 768px) {
+      .about-container {
+        padding: 2rem 1.5rem;
+      }
+      
+      .page-title {
+        font-size: 2rem;
+      }
+      
+      .intro p {
+        font-size: 1.1rem;
+      }
+      
+      .steps {
+        flex-direction: column;
+      }
+      
+      .step {
+        margin-bottom: 2rem;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fa-solid fa-atom logo-icon"></i>
+        <div class="logo-text">Prepify</div>
+      </div>
+      <a href="landing.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> home
+      </a>
+    </header>
+
+    <div class="about-container">
+      <h1 class="page-title">About Prepify</h1>
+      
+      <div class="intro">
+        <p>Transform your study materials into interactive practice questions with AI-powered precision.</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon icon-primary">
+            <i class="fas fa-brain"></i>
+          </div>
+          <h3 class="feature-title">AI-Powered Generation</h3>
+          <p class="feature-desc">Our advanced algorithms analyze your content and create relevant, challenging questions tailored to your material.</p>
+          <span class="feature-status status-available">Available Now</span>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon icon-primary">
+            <i class="fas fa-cogs"></i>
+          </div>
+          <h3 class="feature-title">Multiple Question Types</h3>
+          <p class="feature-desc">Generate multiple choice, short answer, true/false, and essay questions to test knowledge comprehensively.</p>
+          <span class="feature-status status-available">Available Now</span>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon icon-primary">
+            <i class="fas fa-download"></i>
+          </div>
+          <h3 class="feature-title">Export & Share</h3>
+          <p class="feature-desc">Download your questions as PDFs for offline study or to share with classmates and study groups.</p>
+          <span class="feature-status status-available">Available Now</span>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon icon-quiz">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <h3 class="feature-title">Interactive Quiz Mode</h3>
+          <p class="feature-desc">Test your knowledge with timed quizzes, instant feedback, and performance tracking to monitor your progress.</p>
+          <span class="feature-status status-soon">Coming Soon</span>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon icon-test">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3 class="feature-title">Practice Tests</h3>
+          <p class="feature-desc">Simulate exam conditions with full-length practice tests, customizable difficulty levels, and detailed score reports.</p>
+          <span class="feature-status status-soon">Coming Soon</span>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon icon-primary">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 class="feature-title">Progress Analytics</h3>
+          <p class="feature-desc">Track your performance over time, identify weak areas, and receive personalized recommendations for improvement.</p>
+          <span class="feature-status status-soon">Coming Soon</span>
+        </div>
+      </div>
+      
+      <div class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Upload Your Content</h3>
+            <p class="step-desc">Provide your study materials, textbooks, or notes in any format.</p>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3 class="step-title">AI Processing</h3>
+            <p class="step-desc">Our system analyzes your content and identifies key concepts.</p>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Generate Questions</h3>
+            <p class="step-desc">Receive customized practice questions based on your material.</p>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">4</div>
+            <h3 class="step-title">Study & Export</h3>
+            <p class="step-desc">Test your knowledge and export results for offline use.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cta-section">
+        <h2 class="cta-title">Ready to Transform Your Studying?</h2>
+        <a href="upload.html" class="cta-button">Get Started Now</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
