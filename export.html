@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prepify - Export Questions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --primary-dark: #3a0ca3;
+      --secondary: #f72585;
+      --accent: #4cc9f0;
+      --bg: #f8f9fa;
+      --text: #2b2d42;
+      --text-light: #6c757d;
+      --white: #ffffff;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .back-btn {
+      background: var(--white);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 10px;
+    }
+
+    .back-btn:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .export-container {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      padding: 2rem;
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 1.5rem;
+    }
+
+    .action-btn {
+      padding: 10px 20px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .action-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .questions-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+
+    .questions-table th,
+    .questions-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e1e5e9;
+    }
+
+    .questions-table th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+    }
+
+    .questions-table tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    .question-number {
+      width: 50px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .question-type {
+      width: 120px;
+    }
+
+    .question-type-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .type-mcq {
+      background-color: #e9f5ff;
+      color: #0066cc;
+    }
+
+    .type-short_answer {
+      background-color: #fff0e6;
+      color: #cc5500;
+    }
+
+    .type-true_false {
+      background-color: #e6f7ff;
+      color: #006699;
+    }
+
+    .type-essay {
+      background-color: #f0e6ff;
+      color: #6600cc;
+    }
+
+    .mcq-options {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .mcq-option {
+      margin: 4px 0;
+    }
+
+    .correct-answer {
+      font-weight: 600;
+      color: #2e7d32;
+      margin-top: 5px;
+    }
+
+    .essay-answer {
+      background-color: #f9f9f9;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-light);
+    }
+
+    .no-data i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #ddd;
+    }
+
+    @media (max-width: 768px) {
+      .questions-table {
+        display: block;
+        overflow-x: auto;
+      }
+      
+      .questions-table th,
+      .questions-table td {
+        padding: 8px 10px;
+      }
+    }
+
+    /* PDF specific styles */
+    @media print {
+      body {
+        padding: 0;
+        background: white;
+      }
+      
+      .container {
+        max-width: 100%;
+        box-shadow: none;
+      }
+      
+      header, .controls {
+        display: none;
+      }
+      
+      .export-container {
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+
+    .pdf-header {
+      display: none;
+    }
+
+    .pdf-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--primary-dark);
+    }
+
+    .pdf-footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fa-solid fa-atom logo-icon"></i>
+        <div class="logo-text">Prepify</div>
+      </div>
+      <a href="questions.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Questions
+      </a>
+    </header>
+    <div class="controls">
+        <button style="margin-left: auto; margin-right: auto;" class="action-btn" id="downloadPdf">
+          <i class="fas fa-download"></i> Download PDF
+        </button>
+      </div>
+
+    <div class="export-container" id="exportContainer">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; height: auto;justify-content: center;flex-direction: column; margin-bottom: 10px;">
+      <h1 style="text-align: center;" class="page-title">Exported Questions</h1>
+     <h1 style="margin-top: -25px;" class="logo-text"><i class="fa-solid fa-atom logo-icon"></i> Prepify AI</h1>
+     
+      </div>
+      <div id="questionsTable">
+        <div class="no-data">
+          <i class="fas fa-file-export"></i>
+          <p>No questions available for export</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const questionsTable = document.getElementById('questionsTable');
+      const downloadPdfBtn = document.getElementById('downloadPdf');
+      
+      // Get data from localStorage
+      const exportData = JSON.parse(localStorage.getItem('exportData'));
+      
+      if (!exportData || !exportData.questions || exportData.questions.length === 0) {
+        questionsTable.innerHTML = `
+          <div class="no-data">
+            <i class="fas fa-file-export"></i>
+            <p>No questions available for export</p>
+            <a href="questions.html" class="back-btn" style="margin-top: 1rem;">
+              <i class="fas fa-arrow-left"></i> Back to Questions
+            </a>
+          </div>
+        `;
+        downloadPdfBtn.disabled = true;
+        return;
+      }
+      
+      // Render questions table
+      renderQuestionsTable(exportData.questions);
+      
+      // Set up PDF download
+      downloadPdfBtn.addEventListener('click', generatePDF);
+    });
+    
+    function renderQuestionsTable(questions) {
+      // Create a clone of questions for PDF formatting
+      const pdfQuestions = JSON.parse(JSON.stringify(questions));
+      
+      let tableHTML = `
+        <div class="pdf-header">
+          <h1 class="pdf-title">Prepify Study Questions</h1>
+          <p>Generated on ${new Date().toLocaleDateString()}</p>
+        </div>
+        <table class="questions-table">
+          <thead>
+            <tr>
+              <th class="question-number">#</th>
+              <th>Question</th>
+              <th class="question-type">Type</th>
+              <th>Answer</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      pdfQuestions.forEach((question, index) => {
+        const typeClass = `type-${question.type}`;
+        const typeText = formatQuestionType(question.type);
+        
+        let answerHTML = '';
+        
+        if (question.type === 'mcq') {
+          // MCC format for multiple choice
+          answerHTML = `
+            <div class="mcq-options">
+              ${question.options.map((option, i) => `
+                <div class="mcq-option">
+                  ${String.fromCharCode(65 + i)}. ${option}
+                </div>
+              `).join('')}
+            </div>
+            <div class="correct-answer">
+              Correct Answer: ${String.fromCharCode(65 + question.correctAnswer)}
+            </div>
+          `;
+        } else if (question.type === 'short_answer') {
+          // SAN format for short answer
+          answerHTML = `
+            <div class="correct-answer">
+              Answer: ${question.correctAnswer || 'No answer provided'}
+            </div>
+          `;
+        } else if (question.type === 'true_false') {
+          answerHTML = `
+            <div class="correct-answer">
+              Answer: ${question.correctAnswer ? 'True' : 'False'}
+            </div>
+          `;
+        } else if (question.type === 'essay') {
+          // Include AI-generated answer if available
+          if (question.aiAnswer) {
+            answerHTML = `
+              <div class="essay-answer">
+                <strong>Model Answer:</strong><br>
+                ${question.aiAnswer}
+              </div>
+            `;
+          } else {
+            answerHTML = `
+              <div class="correct-answer">
+                Essay question - See explanation
+              </div>
+            `;
+          }
+        }
+        
+        // Add explanation if available
+        let explanationHTML = '';
+        if (question.explanation) {
+          explanationHTML = `
+            <tr>
+              <td></td>
+              <td colspan="3">
+                <strong>Explanation:</strong> ${question.explanation}
+              </td>
+            </tr>
+          `;
+        }
+        
+        tableHTML += `
+          <tr>
+            <td class="question-number">${index + 1}</td>
+            <td>${question.question}</td>
+            <td class="question-type">
+              <span class="question-type-badge ${typeClass}">${typeText}</span>
+            </td>
+            <td>${answerHTML}</td>
+          </tr>
+          ${explanationHTML}
+        `;
+      });
+      
+      tableHTML += `
+          </tbody>
+        </table>
+        <div class="pdf-footer">
+          <p>Generated by Prepify - Your AI Study Assistant</p>
+        </div>
+      `;
+      
+      document.getElementById('questionsTable').innerHTML = tableHTML;
+    }
+    
+    function formatQuestionType(type) {
+      const typeMap = {
+        'mcq': 'MCQ',
+        'short_answer': 'Short Answer',
+        'true_false': 'True/False',
+        'essay': 'Essay'
+      };
+      
+      return typeMap[type] || type;
+    }
+    
+    function generatePDF() {
+      const element = document.getElementById('exportContainer');
+      
+      // Create a clone of the element to modify for PDF
+      const elementClone = element.cloneNode(true);
+      
+      // Hide the download button in the PDF
+      const downloadBtn = elementClone.querySelector('#downloadPdf');
+      if (downloadBtn) {
+        downloadBtn.style.display = 'none';
+      }
+      
+      // Show the PDF header
+      const pdfHeader = elementClone.querySelector('.pdf-header');
+      if (pdfHeader) {
+        pdfHeader.style.display = 'block';
+      }
+      
+      const options = {
+        margin: 10,
+        filename: 'prepify-questions.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      
+      html2pdf().set(options).from(elementClone).save();
+    }
+  </script>
+</body>
+</html>
