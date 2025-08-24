@@ -48,6 +48,7 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     .generate-answer-btn:disabled {
@@ -136,6 +137,8 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      margin: 10px;
+      
     }
 
     .back-btn:hover {
@@ -388,6 +391,7 @@
       .quiz-btn {
         width: 100%;
       }
+    
     }
   </style>
 </head>
@@ -501,31 +505,44 @@
     });
 
     // Improved JSON extraction function
-    function extractJSONFromText(text) {
-      // First, try to find JSON object pattern
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        throw new Error('No JSON object found in response');
-      }
+   function extractJSONFromText(text) {
+  console.log("Raw text for JSON extraction:", text);
+  
+  // First, try to find JSON object pattern
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    console.error("No JSON object found in response");
+    throw new Error('No JSON object found in response');
+  }
+  
+  let jsonString = jsonMatch[0];
+  console.log("Extracted JSON string:", jsonString);
+  
+  try {
+    return JSON.parse(jsonString);
+  } catch (parseError) {
+    console.error('JSON parsing failed:', parseError);
+    console.error('Problematic JSON string:', jsonString);
+    
+    // Try to fix common JSON issues
+    try {
+      // Remove any text before the first { and after the last }
+      jsonString = jsonString.replace(/^[^{]*/, '').replace(/[^}]*$/, '');
       
-      let jsonString = jsonMatch[0];
+      // Fix unquoted property names
+      jsonString = jsonString.replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*:)/g, '$1"$2"$3');
       
-      // Try to clean the JSON string by removing common AI response artifacts
-      jsonString = jsonString
-        .replace(/^[^{]*/, '') // Remove anything before the first {
-        .replace(/[^}]*$/, '') // Remove anything after the last }
-        .replace(/,\s*([}\]])/g, '$1') // Remove trailing commas
-        .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":'); // Ensure proper quoting
+      // Fix single quotes to double quotes
+      jsonString = jsonString.replace(/'/g, '"');
       
-      try {
-        return JSON.parse(jsonString);
-      } catch (parseError) {
-        console.error('JSON parsing failed:', parseError);
-        console.error('Problematic JSON string:', jsonString);
-        throw new Error('Invalid JSON format in AI response');
-      }
+      console.log("Attempting to parse fixed JSON:", jsonString);
+      return JSON.parse(jsonString);
+    } catch (secondError) {
+      console.error('Second parsing attempt also failed:', secondError);
+      throw new Error('Invalid JSON format in AI response');
     }
-
+  }
+}
     // Generate questions using Groq API
     async function generateQuestionsWithGroq(text, preferences) {
       // Use the preferences from localStorage
@@ -550,7 +567,7 @@
         TEXT:
         ${text.substring(0, 3000)}
         
-        Return ONLY valid JSON with this exact structure. Do not include any other text:
+        Return ONLY valid JSON with this exact structure Do not include any other text:
         {
           "questions": [
             {
@@ -579,6 +596,7 @@
             }
           ]
         }
+           Important: Your response must contain ONLY the JSON object, without any additional text, explanations, or prefixes.
       `;
       
       try {
@@ -744,7 +762,7 @@
               <option value="20">20 marks</option>
             </select>
             <button class="generate-answer-btn" data-question="${index}">
-              Generate Model Answer
+             Generate with AI
             </button>
           </div>
           <div class="essay-answer" id="essay-answer-${index}"></div>
@@ -797,7 +815,7 @@
     async function generateEssayAnswer(question, marks) {
       const prompt = `
         Create a model answer for this essay question worth ${marks} marks.
-        The answer should be comprehensive, well-structured, and appropriate for the mark allocation.
+        The answer should be comprehensive,with points and spacing, well-structured, and appropriate for the mark allocation.
         
         QUESTION: ${question}
         
@@ -874,6 +892,7 @@
       `;
     }
     
+
     // Set up filter buttons
     filterButtons.forEach(button => {
       button.addEventListener('click', () => {
@@ -885,9 +904,21 @@
     });
     
     // Set up action buttons
-    document.getElementById('exportBtn').addEventListener('click', () => {
-      alert('Export functionality will be available soon');
-    });
+     // Set up export button
+document.getElementById('exportBtn').addEventListener('click', () => {
+  // Prepare data for export
+  const exportData = {
+    questions: allQuestions,
+    exportDate: new Date().toISOString(),
+    documentTitle: localStorage.getItem('documentTitle') || 'Prepify Questions'
+  };
+  
+  // Save to localStorage
+  localStorage.setItem('exportData', JSON.stringify(exportData));
+  
+  // Redirect to export page
+  window.location.href = 'export.html';
+});
     
     document.getElementById('newQuizBtn').addEventListener('click', () => {
       window.location.href = 'upload.html';
